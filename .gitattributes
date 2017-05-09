@@ -1,0 +1,5 @@
+01_lamp_stack/* linguist-language=Shell
+01_lamp_stack/*.* linguist-language=Shell
+01_lamp_stack/* linguist-vendored
+01_lamp_stack/*.* linguist-vendored
+database.php linguist-vendored=false
