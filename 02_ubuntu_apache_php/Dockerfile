@@ -19,8 +19,8 @@ RUN apt-get update && \
 	echo 'ServerName localhost' >> /etc/apache2/apache2.conf && \
 	sed -i -e 's/DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm/DirectoryIndex index.php index.pl index.py index.cgi index.xhtml index.html index.htm/g' /etc/apache2/mods-enabled/dir.conf && \
  	sudo setcap 'cap_net_bind_service=+ep' /usr/sbin/apache2 && \
- 	mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR
-	#sudo chown -R www-data: /var/{log,run,lock}/apache2
+ 	mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR && \
+	sudo chown -R www-data: $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR -R
 ENV DEBIAN_FRONTEND=teletype
 EXPOSE 80
 EXPOSE 443
