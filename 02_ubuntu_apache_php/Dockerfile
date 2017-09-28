@@ -24,4 +24,5 @@ RUN apt-get update && \
 ENV DEBIAN_FRONTEND=teletype
 EXPOSE 80
 EXPOSE 443
+USER www-data:www-data
 CMD apachectl -D FOREGROUND
