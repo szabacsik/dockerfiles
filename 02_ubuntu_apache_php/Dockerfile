@@ -8,7 +8,8 @@ ENV TERM=xterm \
 	APACHE_PID_FILE=/var/run/apache2.pid \
 	APACHE_RUN_DIR=/var/run/apache2 \
 	APACHE_LOCK_DIR=/var/lock/apache2
-RUN apt-get update && \
+RUN echo "root:password" | chpasswd && \
+	apt-get update && \
     apt-get install -y --assume-yes --no-install-recommends apt-utils && \
     apt-get -y upgrade && \
     apt-get -y dist-upgrade && \

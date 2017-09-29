@@ -21,4 +21,4 @@ tail:
 	docker run --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME) tail -f /dev/null
 
 bash:
-	docker exec -it $(CONTAINER) bash
+	docker exec -u 0 -it $(CONTAINER) bash
