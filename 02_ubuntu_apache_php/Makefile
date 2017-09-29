@@ -5,14 +5,25 @@ TAG = latest
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
 CONTAINER = $(REGISTRY)-$(IMAGE)
 
+MOUNT_POINT_OUTSIDE = /c/Users/andras.szabacsik/workspace/app
+MOUNT_POINT_INSIDE = /attached
+
+messages:
+	@echo MOUNT_POINT_OUTSIDE: $(MOUNT_POINT_OUTSIDE)
+	@echo MOUNT_POINT_INSIDE: $(MOUNT_POINT_INSIDE)
+
 build:
 	docker build -t $(NAME) .
 
 build-nocache:
 	docker build --no-cache -t $(NAME) .
 
-run:
-	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME)
+deploy: messages
+	mkdir -p $(MOUNT_POINT_OUTSIDE)
+	mkdir -p $(MOUNT_POINT_OUTSIDE)/htdocs
+
+run: deploy
+	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(MOUNT_POINT_OUTSIDE):$(MOUNT_POINT_INSIDE) $(NAME)
 
 debug:
 	docker run --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME)
