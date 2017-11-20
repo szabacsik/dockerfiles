@@ -5,8 +5,8 @@ TAG = latest
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
 CONTAINER = $(REGISTRY)-$(IMAGE)
 
-host_volume_source = /c/Users/andras.szabacsik/workspace/app
-container_volume_target = /attached
+default_host_volume_source = $(shell pwd)
+default_container_volume_target = attached
 
 messages:
 	@echo host_volume_source: $(host_volume_source)
@@ -18,7 +18,7 @@ build:
 build-nocache:
 	docker build --no-cache -t $(NAME) .
 
-deploy: messages
+deploy: get-environment-variables messages
 	mkdir -p $(host_volume_source)
 	mkdir -p $(host_volume_source)/htdocs
 
@@ -33,3 +33,17 @@ tail:
 
 bash:
 	docker exec -u 0 -it $(CONTAINER) bash
+
+get-environment-variables:
+ifndef environment_host_volume_source
+host_volume_source = $(default_host_volume_source)
+$(info $$environment_host_volume_source variable is not set falling back to default [${host_volume_source}])
+else
+host_volume_source = $(environment_host_volume_source)
+endif
+ifndef environment_container_volume_target
+container_volume_target = $(default_container_volume_target)
+$(info $$environment_container_volume_target variable is not set falling back to default [${container_volume_target}])
+else
+container_volume_target = $(environment_container_volume_target)
+endif
