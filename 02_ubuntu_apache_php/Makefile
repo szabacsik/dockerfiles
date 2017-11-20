@@ -5,12 +5,12 @@ TAG = latest
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
 CONTAINER = $(REGISTRY)-$(IMAGE)
 
-MOUNT_POINT_OUTSIDE = /c/Users/andras.szabacsik/workspace/app
-MOUNT_POINT_INSIDE = /attached
+host_volume_source = /c/Users/andras.szabacsik/workspace/app
+container_volume_target = /attached
 
 messages:
-	@echo MOUNT_POINT_OUTSIDE: $(MOUNT_POINT_OUTSIDE)
-	@echo MOUNT_POINT_INSIDE: $(MOUNT_POINT_INSIDE)
+	@echo host_volume_source: $(host_volume_source)
+	@echo container_volume_target: $(container_volume_target)
 
 build:
 	docker build -t $(NAME) .
@@ -19,11 +19,11 @@ build-nocache:
 	docker build --no-cache -t $(NAME) .
 
 deploy: messages
-	mkdir -p $(MOUNT_POINT_OUTSIDE)
-	mkdir -p $(MOUNT_POINT_OUTSIDE)/htdocs
+	mkdir -p $(host_volume_source)
+	mkdir -p $(host_volume_source)/htdocs
 
 run: deploy
-	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(MOUNT_POINT_OUTSIDE):$(MOUNT_POINT_INSIDE) $(NAME)
+	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(host_volume_source):$(container_volume_target) $(NAME)
 
 debug:
 	docker run --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME)
