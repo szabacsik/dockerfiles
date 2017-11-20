@@ -5,8 +5,10 @@ TAG = latest
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
 CONTAINER = $(REGISTRY)-$(IMAGE)
 
-default_host_volume_source = $(shell pwd)
-default_container_volume_target = attached
+command = pwd
+argument = "-P"
+default_host_volume_source = $(shell $(command) $(argument))
+default_container_volume_target = /attached
 
 messages:
 	@echo host_volume_source: $(host_volume_source)
@@ -19,8 +21,8 @@ build-nocache:
 	docker build --no-cache -t $(NAME) .
 
 deploy: get-environment-variables messages
-	mkdir -p $(host_volume_source)
-	mkdir -p $(host_volume_source)/htdocs
+	mkdir -p "$(host_volume_source)"
+	mkdir -p "$(host_volume_source)/htdocs"
 
 run: deploy
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(host_volume_source):$(container_volume_target) $(NAME)
