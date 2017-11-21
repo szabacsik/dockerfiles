@@ -22,3 +22,9 @@ docker run -it -p 8080:80 -p 2222:22 -p 33306:3306 szabacsik/01_lamp:1.0
 ```bash
 /opt/services.sh
 ```
+## 02_ubuntu_apache_php
+### set environment variables
+#### Windows 8 mintty ( Docker Quickstart Terminal )
+```mintty
+export environment_host_volume_source=\/c\/Users\/andras.szabacsik\/userspace\/cloud\/Dropbox\/Workspaces\/COM0151\/offline\/attached
+```

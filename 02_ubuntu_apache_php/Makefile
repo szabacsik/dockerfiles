@@ -41,7 +41,7 @@ ifndef environment_host_volume_source
 host_volume_source = $(default_host_volume_source)
 $(info $$environment_host_volume_source variable is not set falling back to default [${host_volume_source}])
 else
-host_volume_source = $(environment_host_volume_source)
+host_volume_source = $(subst C:/,/c/,$(environment_host_volume_source))
 endif
 ifndef environment_container_volume_target
 container_volume_target = $(default_container_volume_target)
