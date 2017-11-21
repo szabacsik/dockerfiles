@@ -23,6 +23,7 @@ RUN apt-get install -y --assume-yes --no-install-recommends php7.0 php7.0-cli ph
 	apt-get clean && \
 	apt-get autoclean && \
 	apt-get autoremove
+RUN a2enmod rewrite	
 ENV DEBIAN_FRONTEND=teletype
 EXPOSE 80
 EXPOSE 443
