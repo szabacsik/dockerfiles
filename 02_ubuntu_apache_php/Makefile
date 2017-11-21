@@ -11,8 +11,8 @@ default_host_volume_source = $(subst /c/users/,/c/Users/,$(shell $(command) $(ar
 default_container_volume_target = /attached
 
 messages:
-	@echo host_volume_source: $(host_volume_source)
-	@echo container_volume_target: $(container_volume_target)
+	$(info $$host_volume_source is set to [${host_volume_source}])
+	$(info $$container_volume_target is set to [${container_volume_target}])
 
 build:
 	docker build -t $(NAME) .
