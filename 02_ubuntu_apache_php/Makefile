@@ -7,7 +7,7 @@ CONTAINER = $(REGISTRY)-$(IMAGE)
 
 command = pwd
 argument = "-P"
-default_host_volume_source = $(shell $(command) $(argument))
+default_host_volume_source = $(subst /c/users/,/c/Users/,$(shell $(command) $(argument)))
 default_container_volume_target = /attached
 
 messages:
