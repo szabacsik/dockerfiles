@@ -25,6 +25,7 @@ deploy: get-environment-variables messages
 	mkdir -p "$(host_volume_source)/etc"
 	mkdir -p "$(host_volume_source)/application"
 	- git clone https://gist.github.com/72b348e56bacc2abe1c574ffe169edc1.git "$(host_volume_source)/etc"
+	- git clone https://gist.github.com/a6e433f6c3aca8c159775cc99f540cf9.git "$(host_volume_source)/application"
 
 run: deploy
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(host_volume_source):$(container_volume_target) $(NAME)
