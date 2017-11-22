@@ -24,6 +24,7 @@ RUN apt-get install -y --assume-yes --no-install-recommends php7.0 php7.0-cli ph
 	apt-get autoclean && \
 	apt-get autoremove
 RUN a2enmod rewrite	
+RUN sed -i -e 's/IncludeOptional sites-enabled/# IncludeOptional sites-enabled/g' /etc/apache2/apache2.conf
 ENV DEBIAN_FRONTEND=teletype
 EXPOSE 80
 EXPOSE 443
