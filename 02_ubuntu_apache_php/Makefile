@@ -21,17 +21,17 @@ build-nocache:
 	docker build --no-cache -t $(NAME) .
 
 deploy: get-environment-variables messages
-	mkdir -p "$(host_volume_source)"
-	mkdir -p "$(host_volume_source)/etc"
-	mkdir -p "$(host_volume_source)/application"
-	- git clone https://gist.github.com/72b348e56bacc2abe1c574ffe169edc1.git "$(host_volume_source)/etc"
-	- git clone https://gist.github.com/a6e433f6c3aca8c159775cc99f540cf9.git "$(host_volume_source)/application"
+	mkdir -p $(host_volume_source)
+	mkdir -p $(host_volume_source)/etc
+	mkdir -p $(host_volume_source)/application
+	- git clone https://gist.github.com/72b348e56bacc2abe1c574ffe169edc1.git "$(git_clone_target)/etc"
+	- git clone https://gist.github.com/a6e433f6c3aca8c159775cc99f540cf9.git "$(git_clone_target)/application"
 
 run: deploy
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v $(host_volume_source):$(container_volume_target) $(NAME)
 
 debug:
-	docker run --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME)
+	docker run -a STDERR --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME)
 
 tail:
 	docker run --name=$(CONTAINER) -p 80:80 -p 443:443 $(NAME) tail -f /dev/null
@@ -51,4 +51,11 @@ container_volume_target = $(default_container_volume_target)
 $(info $$environment_container_volume_target variable is not set falling back to default [${container_volume_target}])
 else
 container_volume_target = $(environment_container_volume_target)
+endif
+ifdef environment_git_clone_target
+git_clone_target = $(environment_git_clone_target)
+$(info $$environment_git_clone_target variable is set using its value [${host_volume_source}])
+else
+git_clone_target = $(host_volume_source)
+$(info $$environment_git_clone_target variable is not set git_clone_target is going to equal with host_volume_source [${host_volume_source}])
 endif
