@@ -8,7 +8,6 @@ CONTAINER = $(REGISTRY)-$(IMAGE)
 command = pwd
 argument = "-P"
 default_host_volume_source = $(subst /c/users/,/c/Users/,$(shell $(command) $(argument)))
-default_docker_host_volume_source = $(default_host_volume_source)
 default_container_volume_target = /attached
 
 messages: get-environment-variables
@@ -86,6 +85,6 @@ ifdef environment_windows_host_volume_source
 docker_host_volume_source = $(environment_windows_host_volume_source)
 $(info $$environment_windows_host_volume_source is set to [${environment_windows_host_volume_source}] using this value for docker_host_volume_source)
 else
-docker_host_volume_source = $(default_docker_host_volume_source)
-$(info $$environment_windows_host_volume_source is not set value of docker_host_volume_source will be [${default_docker_host_volume_source}])
+docker_host_volume_source = $(host_volume_source)
+$(info $$environment_windows_host_volume_source is not set value of docker_host_volume_source will be [${host_volume_source}])
 endif
