@@ -46,6 +46,7 @@ deploy: get-environment-variables messages
 	sleep 1
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/application/
+	chmod 777 "$(host_volume_source)" -R
 
 run: deploy
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v "$(docker_host_volume_source)":$(container_volume_target) $(NAME)
