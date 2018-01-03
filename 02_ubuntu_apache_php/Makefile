@@ -25,7 +25,10 @@ build-nocache:
 deploy: get-environment-variables messages
 	mkdir -p "$(host_volume_source)"
 	mkdir -p "$(host_volume_source)/etc"
-	mkdir -p "$(host_volume_source)/application"
+	mkdir -p "$(host_volume_source)/artifact/public"
+	mkdir -p "$(host_volume_source)/artifact/application"
+	mkdir -p "$(host_volume_source)/artifact/vendor"
+	mkdir -p "$(host_volume_source)/artifact/tests"
 	mkdir -p "$(host_volume_source)/temp"
 	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
 	git clone https://gist.github.com/72b348e56bacc2abe1c574ffe169edc1.git "$(git_clone_target)/temp"
@@ -44,7 +47,7 @@ deploy: get-environment-variables messages
 	chmod 700 "$(host_volume_source)/temp" -R
 	sleep 1
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
-	mv $(host_volume_source)/temp/* $(host_volume_source)/application/
+	mv $(host_volume_source)/temp/* $(host_volume_source)/artifact/public/
 	chmod 777 "$(host_volume_source)" -R
 
 run: deploy
