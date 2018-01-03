@@ -31,23 +31,32 @@ deploy: get-environment-variables messages
 	mkdir -p "$(host_volume_source)/artifact/tests"
 	mkdir -p "$(host_volume_source)/temp"
 	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
+	#apache.conf
 	git clone https://gist.github.com/72b348e56bacc2abe1c574ffe169edc1.git "$(git_clone_target)/temp"
 	chmod 700 "$(host_volume_source)/temp" -R
 	sleep 1
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/etc/
 	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
+	#php.ini
 	git clone https://gist.github.com/42dff0f9c8e28d6dcf95fcda10fd7608.git "$(git_clone_target)/temp"
 	chmod 700 "$(host_volume_source)/temp" -R
 	sleep 1
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/etc/
 	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
+	#index.php
 	git clone https://gist.github.com/a6e433f6c3aca8c159775cc99f540cf9.git "$(git_clone_target)/temp"
 	chmod 700 "$(host_volume_source)/temp" -R
 	sleep 1
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/artifact/public/
+	#composer.json
+	git clone https://gist.github.com/3eeb37ee4bf6db14ccb29871576abadb.git "$(git_clone_target)/temp"
+	chmod 700 "$(host_volume_source)/temp" -R
+	sleep 1
+	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
+	mv $(host_volume_source)/temp/* $(host_volume_source)/artifact/
 	chmod 777 "$(host_volume_source)" -R
 
 run: deploy
