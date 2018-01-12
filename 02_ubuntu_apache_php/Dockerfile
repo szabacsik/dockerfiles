@@ -31,4 +31,4 @@ ENV DEBIAN_FRONTEND=teletype
 EXPOSE 80
 EXPOSE 443
 USER www-data:www-data
-CMD apachectl -D FOREGROUND
+CMD rm -f /var/run/apache2/* && apachectl -D FOREGROUND
