@@ -59,7 +59,7 @@ deploy: get-environment-variables messages
 	mv $(host_volume_source)/temp/* $(host_volume_source)/artifact/
 	chmod 777 "$(host_volume_source)" -R
 
-run: deploy
+run:
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v "$(docker_host_volume_source)":$(container_volume_target) $(NAME)
 
 debug:
