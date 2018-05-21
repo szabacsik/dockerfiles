@@ -1,5 +1,5 @@
-REGISTRY = improwerk
-IMAGE = ubuntu_apache_php
+REGISTRY = szabacsik
+IMAGE = ubuntu_apache_php_phalcon
 TAG = latest
 
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
