@@ -1,6 +1,7 @@
 REGISTRY = szabacsik
 IMAGE = ubuntu_apache_php_phalcon
 TAG = latest
+NOW = $(shell TZ="Europe/Budapest" date +'%Y.%m.%d. %H:%M:%S.%3N')
 
 NAME = $(REGISTRY)/$(IMAGE):$(TAG)
 CONTAINER = $(REGISTRY)-$(IMAGE)
@@ -11,6 +12,7 @@ default_host_volume_source = $(subst /c/users/,/c/Users/,$(shell $(command) $(ar
 default_container_volume_target = /attached
 
 messages: get-environment-variables
+	$(info $$NOW = [$(NOW)])
 	$(info $$host_volume_source = [${host_volume_source}])
 	$(info $$docker_host_volume_source = [${docker_host_volume_source}])
 	$(info $$container_volume_target = [${container_volume_target}])
