@@ -60,6 +60,7 @@ deploy: get-environment-variables messages
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/artifact/
 	chmod 777 "$(host_volume_source)" -R
+	docker run --rm -it --name=deploy -v "$(docker_host_volume_source)":$(container_volume_target) $(NAME) /bin/sh -c 'cd /attached/artifact; composer install'
 
 run:
 	docker run -d --name=$(CONTAINER) -p 80:80 -p 443:443 -v "$(docker_host_volume_source)":$(container_volume_target) $(NAME)
