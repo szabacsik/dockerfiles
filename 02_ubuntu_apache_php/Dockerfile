@@ -27,6 +27,9 @@ RUN	apt-get install -y --assume-yes --no-install-suggests --install-recommends a
  	mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR && \
 	sudo chown -R www-data: $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR -R
 RUN apt-get install -y --assume-yes --no-install-suggests --install-recommends php php7.2-mysql php7.2-dev re2c php-mbstring
+RUN cd /usr/local/bin && \
+	curl -sS https://getcomposer.org/installer | php && \
+	mv /usr/local/bin/composer.phar /usr/local/bin/composer
 RUN git clone --depth=1 "git://github.com/phalcon/cphalcon.git" && \
     cd cphalcon/build && \
     sudo ./install
