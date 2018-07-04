@@ -8,7 +8,8 @@ ENV TERM=xterm \
 	APACHE_PID_FILE=/var/run/apache2.pid \
 	APACHE_RUN_DIR=/var/run/apache2 \
 	APACHE_LOCK_DIR=/var/lock/apache2 \
-	PHP_INI_SCAN_DIR=/etc/php/7.2/apache2/conf.d:/attached/etc
+	PHP_INI_SCAN_DIR=/etc/php/7.2/apache2/conf.d:/attached/etc \
+	COMPOSER_CACHE_DIR=/attached/temp/composer
 RUN echo "root:password" | chpasswd
 RUN apt-get update
 RUN apt-get install -y --assume-yes --no-install-recommends apt-utils
