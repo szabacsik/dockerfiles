@@ -31,6 +31,13 @@ RUN apt-get install -y --assume-yes --no-install-suggests --install-recommends p
 RUN cd /usr/local/bin && \
 	curl -sS https://getcomposer.org/installer | php && \
 	mv /usr/local/bin/composer.phar /usr/local/bin/composer
+RUN cd /tmp && \
+	git clone git://github.com/xdebug/xdebug.git && \
+	cd /tmp/xdebug && \
+	phpize && \
+	./configure --enable-xdebug && \
+	make && \
+	make install
 RUN git clone --depth=1 "git://github.com/phalcon/cphalcon.git" && \
     cd cphalcon/build && \
     sudo ./install
