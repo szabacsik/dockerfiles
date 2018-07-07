@@ -47,6 +47,13 @@ deploy: get-environment-variables messages
 	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
 	mv $(host_volume_source)/temp/* $(host_volume_source)/etc/
 	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
+	#xdebug.ini
+	git clone https://gist.github.com/b97ccf73be190372a0f144c41ba99833.git "$(git_clone_target)/temp"
+	chmod 700 "$(host_volume_source)/temp" -R
+	sleep 1
+	find $(host_volume_source)/temp -name '.git' -exec rm -rf {} +
+	mv $(host_volume_source)/temp/* $(host_volume_source)/etc/
+	find "$(host_volume_source)" -name "temp" -exec rm -rf {} +
 	#index.php
 	git clone https://gist.github.com/a6e433f6c3aca8c159775cc99f540cf9.git "$(git_clone_target)/temp"
 	chmod 700 "$(host_volume_source)/temp" -R
