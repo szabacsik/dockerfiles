@@ -39,6 +39,8 @@ RUN cd /tmp && \
 	make && \
 	make install && \
 	bash -c 'echo -e "\n"zend_extension="$(php-config --extension-dir)/xdebug.so\n" | sudo tee -a /etc/php/7.2/apache2/php.ini'
+RUN curl -LsS https://codeception.com/codecept.phar -o /usr/local/bin/codecept && \
+	chmod a+x /usr/local/bin/codecept
 RUN git clone --depth=1 "git://github.com/phalcon/cphalcon.git" && \
     cd cphalcon/build && \
     sudo ./install
