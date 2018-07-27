@@ -27,7 +27,7 @@ RUN	apt-get install -y --assume-yes --no-install-suggests --install-recommends a
  	sudo setcap 'cap_net_bind_service=+ep' /usr/sbin/apache2 && \
  	mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR && \
 	sudo chown -R www-data: $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR -R
-RUN apt-get install -y --assume-yes --no-install-suggests --install-recommends php php7.2-mysql php7.2-dev re2c php-mbstring
+RUN apt-get install -y --assume-yes --no-install-suggests --install-recommends php php7.2-mysql php7.2-dev re2c php-mbstring php-curl
 RUN cd /usr/local/bin && \
 	curl -sS https://getcomposer.org/installer | php && \
 	mv /usr/local/bin/composer.phar /usr/local/bin/composer
