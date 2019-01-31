@@ -41,6 +41,16 @@ RUN cd /tmp && \
 	bash -c 'echo -e "\n"zend_extension="$(php-config --extension-dir)/xdebug.so\n" | sudo tee -a /etc/php/7.2/apache2/php.ini'
 RUN curl -LsS https://codeception.com/codecept.phar -o /usr/local/bin/codecept && \
 	chmod a+x /usr/local/bin/codecept
+RUN cd /tmp && \
+    git clone https://github.com/jbboehr/php-psr.git && \
+    cd php-psr && \
+    phpize && \
+    ./configure && \
+    make && \
+    make test && \
+    make install && \
+    echo extension=psr.so | tee -a /etc/php/7.2/apache2/php.ini && \
+    echo extension=psr.so | tee -a /etc/php/7.2/cli/php.ini
 RUN git clone --depth=1 "git://github.com/phalcon/cphalcon.git" && \
     cd cphalcon/build && \
     sudo ./install
