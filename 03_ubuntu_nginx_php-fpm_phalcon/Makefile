@@ -10,8 +10,14 @@ build:
 build-nocache:
 	docker build --no-cache -t $(NAME) .
 
-bash:
-	docker run -p 80:80 -p 443:443 --rm -it $(NAME) /bin/bash
+run-bash:
+	docker run -p 80:80 -p 443:443 -p 9001:9001 --rm -it $(NAME) /bin/bash
 
 run:
-	docker run -p 80:80 -p 443:443 -d --rm --name=$(CONTAINER) $(NAME)
+	docker run -p 80:80 -p 443:443 -p 9001:9001 -d --rm --name=$(CONTAINER) $(NAME)
+
+bash:
+	docker exec -it -u0 $(CONTAINER) /bin/bash
+
+stop:
+	docker stop $(CONTAINER)

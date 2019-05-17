@@ -102,4 +102,5 @@ RUN chown worker:worker /home/worker -R && \
 COPY index.php /home/worker/app/current/public/
 EXPOSE 80
 EXPOSE 443
+EXPOSE 9001
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
