@@ -9,7 +9,7 @@ RUN apt update && \
     apt full-upgrade
 
 #Install required packages
-RUN apt install software-properties-common -y
+RUN apt install software-properties-common curl sudo git libpcre3-dev apt-transport-https -y
 
 #Add worker user
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
@@ -25,7 +25,8 @@ RUN add-apt-repository ppa:ondrej/php && \
 RUN apt install -y \
     php-fpm \
     php-common \
-    php-cli
+    php-cli \
+    php-dev
 
 #Install PHP extensions
 RUN apt install -y \
@@ -42,6 +43,23 @@ RUN apt install -y nginx
 
 #Install Supervisor
 RUN apt install supervisor -y
+
+#Compile PSR extension from source
+RUN cd /tmp && \
+    git clone https://github.com/jbboehr/php-psr.git && \
+    cd php-psr && \
+    phpize && \
+    ./configure && \
+    make && \
+    TEST_PHP_ARGS="-q" make test && \
+    make install && \
+    echo 'extension=psr.so' >> /etc/php/7.3/fpm/php.ini
+
+#Install Phalcon Web Framework
+RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash && \
+	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
+	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
+	apt install -y php7.3-phalcon
 
 #PHP FPM configuration
 RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 10/g' /etc/php/7.3/fpm/php-fpm.conf && \
