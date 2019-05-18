@@ -1,5 +1,6 @@
 FROM ubuntu:latest
-LABEL maintainer = "András Szabácsik <https://github.com/szabacsik>"
+LABEL maintainer="András Szabácsik <https://github.com/szabacsik>"
+
 ENV TERM=xterm \
     DEBIAN_FRONTEND=noninteractive
 
@@ -9,7 +10,13 @@ RUN apt update && \
     apt full-upgrade
 
 #Install required packages
-RUN apt install software-properties-common curl sudo git libpcre3-dev apt-transport-https -y
+RUN apt install -y \
+	software-properties-common \
+	curl \
+	sudo \
+	git \
+	libpcre3-dev \
+	apt-transport-https
 
 #Add worker user
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
@@ -42,7 +49,7 @@ RUN add-apt-repository ppa:nginx/stable && \
 RUN apt install -y nginx
 
 #Install Supervisor
-RUN apt install supervisor -y
+RUN apt install -y supervisor
 
 #Compile PSR extension from source
 RUN cd /tmp && \
@@ -63,9 +70,10 @@ RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.d
 
 #PHP FPM configuration
 RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 10/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf
+
 #PHP FPM Pool configuration
-    sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
+RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/group = www-data/group = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/listen = \/run\/php\/php7.3-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/listen.owner = www-data/listen.owner = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
