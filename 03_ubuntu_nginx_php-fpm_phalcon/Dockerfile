@@ -60,7 +60,8 @@ RUN cd /tmp && \
     make && \
     TEST_PHP_ARGS="-q" make test && \
     make install && \
-    echo 'extension=psr.so' >> /etc/php/7.3/fpm/php.ini
+    echo 'extension=psr.so' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'extension=psr.so' >> /etc/php/7.3/cli/php.ini
 
 #Install Phalcon Web Framework
 RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash && \
