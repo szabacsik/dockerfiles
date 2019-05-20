@@ -22,7 +22,10 @@ RUN apt install -y \
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
     echo worker:worker | chpasswd && \
     usermod -aG www-data worker && \
-    echo "worker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    echo "worker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+	mkdir -p /home/worker/volume/app/current/public && \
+    mkdir -p /home/worker/volume/logs && \
+    mkdir -p /home/worker/volume/run
 
 #Add PHP repository
 RUN add-apt-repository ppa:ondrej/php && \
@@ -71,7 +74,8 @@ RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.d
 
 #PHP FPM configuration
 RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 10/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf
+    sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    mkdir -p /home/worker/volume/logs/php-fpm
 
 #PHP FPM Pool configuration
 RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
@@ -85,24 +89,23 @@ RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.co
     sed -i -e 's/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/;pm.max_requests = 500/pm.max_requests = 1000/g' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i -e 's/;slowlog = log\/\$pool.log.slow/slowlog = \/var\/log\/php7.3-fpm-slow.log/g' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i -e 's/;slowlog = log\/\$pool.log.slow/slowlog = \/home\/worker\/volume\/logs\/php-fpm\/slow.log/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/;request_slowlog_timeout = 0/request_slowlog_timeout = 5s/g' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i -e 's/pid = \/run\/php\/php7.3-fpm.pid/pid = \/home\/worker\/app\/logs\/php7.3-fpm.pid/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/app\/logs\/php7.3-fpm.pid/g' /etc/php/7.3/fpm/php-fpm.conf
+    sed -i -e 's/pid = \/run\/php\/php7.3-fpm.pid/pid = \/home\/worker\/volume\/run\/php7.3-fpm.pid/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/volume\/logs\/php-fpm\/error.log/g' /etc/php/7.3/fpm/php-fpm.conf
 
 #NGINX virtual host configuration
-RUN mkdir -p /home/worker/app/current/public && \
-    mkdir -p /home/worker/app/logs && \
-    echo '' > /etc/nginx/sites-available/default  && \
+RUN mkdir -p /home/worker/volume/logs/nginx && \
+	echo '' > /etc/nginx/sites-available/default  && \
     sed -i -e 's/user www-data;/user worker;/g' /etc/nginx/nginx.conf  && \
-    sed -i -e 's/pid \/run\/nginx.pid;/pid \/home\/worker\/app\/logs\/nginx.pid;/g' /etc/nginx/nginx.conf  && \
-    sed -i -e 's/access_log \/var\/log\/nginx\/access.log;/access_log \/home\/worker\/app\/logs\/nginx-access.log;/g' /etc/nginx/nginx.conf  && \
-    sed -i -e 's/error_log \/var\/log\/nginx\/error.log;/error_log \/home\/worker\/app\/logs\/nginx-error.log;/g' /etc/nginx/nginx.conf
+    sed -i -e 's/pid \/run\/nginx.pid;/pid \/home\/worker\/volume\/run\/nginx.pid;/g' /etc/nginx/nginx.conf  && \
+    sed -i -e 's/access_log \/var\/log\/nginx\/access.log;/access_log \/home\/worker\/volume\/logs\/nginx\/access.log;/g' /etc/nginx/nginx.conf  && \
+    sed -i -e 's/error_log \/var\/log\/nginx\/error.log;/error_log \/home\/worker\/volume\/logs\/nginx\/error.log;/g' /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf
 
 #Supervisor configuration
-RUN mkdir /home/worker/app/logs/supervisord -p
+RUN mkdir /home/worker/volume/logs/supervisord/child -p
 COPY supervisord.conf /etc/supervisor/conf.d/
 
 #Helper scripts
@@ -111,7 +114,7 @@ COPY versions.sh /home/worker/
 #Finalize and start
 RUN chown worker:worker /home/worker -R && \
     chmod -R +rx /home/worker
-COPY index.php /home/worker/app/current/public/
+COPY index.php /home/worker/volume/app/current/public/
 EXPOSE 80
 EXPOSE 443
 EXPOSE 9001
