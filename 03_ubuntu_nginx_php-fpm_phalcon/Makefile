@@ -24,3 +24,11 @@ stop:
 
 versions:
 	docker run --rm -it $(NAME) /home/worker/versions.sh
+
+clean:
+	-docker kill $(shell docker ps -q)
+	-docker rm $(shell docker ps -a -q)
+	-docker rmi $(shell docker images -a -q)
+	-docker system prune -a --force
+	docker ps -a
+	docker images -a
