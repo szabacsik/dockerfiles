@@ -105,6 +105,9 @@ RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.c
 RUN mkdir /home/worker/app/logs/supervisord -p
 COPY supervisord.conf /etc/supervisor/conf.d/
 
+#Helper scripts
+COPY versions.sh /home/worker/
+
 #Finalize and start
 RUN chown worker:worker /home/worker -R && \
     chmod -R +rx /home/worker

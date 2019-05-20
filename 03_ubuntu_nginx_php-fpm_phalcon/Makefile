@@ -21,3 +21,6 @@ bash:
 
 stop:
 	docker stop $(CONTAINER)
+
+versions:
+	docker run --rm -it $(NAME) /home/worker/versions.sh
