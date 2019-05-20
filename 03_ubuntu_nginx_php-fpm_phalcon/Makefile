@@ -32,3 +32,13 @@ clean:
 	-docker system prune -a --force
 	docker ps -a
 	docker images -a
+
+USERNAME = $(shell bash -c 'read -p "Username: " username; echo $$username')
+PASSWORD = $(shell bash -c 'read -p "Password: " password; echo $$password')
+LATEST_IMAGE_ID = $(shell docker images | awk '{print $$3}' | awk 'NR==2')
+LATEST_IMAGE_NAME = $(REGISTRY)/$(IMAGE):latest
+push:
+	docker login -u $(USERNAME) -p $(PASSWORD)
+	docker tag $(LATEST_IMAGE_ID) $(LATEST_IMAGE_NAME)
+	docker push $(REGISTRY)/$(IMAGE):$(TAG)
+	docker push $(LATEST_IMAGE_NAME)
