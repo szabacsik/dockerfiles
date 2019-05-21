@@ -80,7 +80,7 @@ RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 
 #PHP FPM Pool configuration
 RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/group = www-data/group = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i -e 's/listen = \/run\/php\/php7.3-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i -e 's/listen = \/run\/php\/php7.3-fpm.sock/listen = \/home\/worker\/volume\/run\/php7.3-fpm.sock/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/listen.owner = www-data/listen.owner = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/listen.group = www-data/listen.group = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/g' /etc/php/7.3/fpm/pool.d/www.conf && \
