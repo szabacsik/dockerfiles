@@ -23,7 +23,7 @@ RUN useradd -m -s /bin/bash -U worker -u 1000 && \
     echo worker:worker | chpasswd && \
     usermod -aG www-data worker && \
     echo "worker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-	mkdir -p /home/worker/volume/app/current/public && \
+	mkdir -p /home/worker/volume/artifact/current/public && \
     mkdir -p /home/worker/volume/logs && \
     mkdir -p /home/worker/volume/run
 
@@ -114,7 +114,7 @@ COPY versions.sh /home/worker/
 #Finalize and start
 RUN chown worker:worker /home/worker -R && \
     chmod -R +rx /home/worker
-COPY index.php /home/worker/volume/app/current/public/
+COPY index.php /home/worker/volume/artifact/current/public/
 EXPOSE 80
 EXPOSE 443
 EXPOSE 9001

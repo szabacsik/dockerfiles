@@ -1,7 +1,7 @@
 #!/bin/bash
-mkdir -p /home/worker/volume/app/current/public
-if [ ! -f /home/worker/volume/app/current/public/index.php ]; then
-    echo -e "<?php\n\tphpinfo();" > /home/worker/volume/app/current/public/index.php
+mkdir -p /home/worker/volume/artifact/current/public
+if [ ! -f /home/worker/volume/artifact/current/public/index.php ]; then
+    echo -e "<?php\n\tphpinfo();" > /home/worker/volume/artifact/current/public/index.php
 fi
 mkdir -p /home/worker/volume/logs/supervisord/child
 mkdir -p /home/worker/volume/logs/php-fpm
