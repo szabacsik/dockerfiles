@@ -77,7 +77,9 @@ RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 
     sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf && \
     mkdir -p /home/worker/volume/logs/php-fpm && \
     sed -i -e 's/pid = \/run\/php\/php7.3-fpm.pid/pid = \/home\/worker\/volume\/run\/php7.3-fpm.pid/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/volume\/logs\/php-fpm\/error.log/g' /etc/php/7.3/fpm/php-fpm.conf
+    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/volume\/logs\/php-fpm\/error.log/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    sed -i -e 's/;log_level = notice/log_level = notice/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    echo 'catch_workers_output = yes' >> /etc/php/7.3/fpm/php-fpm.conf
 
 #PHP FPM Pool configuration
 RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.conf && \
