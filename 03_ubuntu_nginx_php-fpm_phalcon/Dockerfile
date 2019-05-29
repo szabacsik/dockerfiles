@@ -67,9 +67,10 @@ RUN cd /tmp && \
     echo 'extension=psr.so' >> /etc/php/7.3/cli/php.ini
 
 #Install Phalcon Web Framework
+#https://docs.phalconphp.com/4.0/en/installation.html
 RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash && \
 	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
-	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
+	curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.deb.sh | sudo bash && \
 	apt install -y php7.3-phalcon
 
 #PHP FPM configuration
