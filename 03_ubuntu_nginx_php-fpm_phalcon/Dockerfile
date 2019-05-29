@@ -73,12 +73,21 @@ RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.d
 	curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.deb.sh | sudo bash && \
 	apt install -y php7.3-phalcon
 
+#PHP error reporting configuration
+RUN echo 'display_startup_errors=On' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'display_errors=On' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'error_reporting=-1' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'log_errors=On' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'log_errors_max_len=0' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'ignore_repeated_errors=On' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'error_log=/home/worker/volume/logs/php/error.log' >> /etc/php/7.3/fpm/php.ini
+
 #PHP FPM configuration
 RUN sed -i -e 's/;emergency_restart_threshold = 0/emergency_restart_threshold = 10/g' /etc/php/7.3/fpm/php-fpm.conf && \
     sed -i -e 's/;emergency_restart_interval = 0/emergency_restart_interval = 1m/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    mkdir -p /home/worker/volume/logs/php-fpm && \
+    mkdir -p /home/worker/volume/logs/php && \
     sed -i -e 's/pid = \/run\/php\/php7.3-fpm.pid/pid = \/home\/worker\/volume\/run\/php7.3-fpm.pid/g' /etc/php/7.3/fpm/php-fpm.conf && \
-    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/volume\/logs\/php-fpm\/error.log/g' /etc/php/7.3/fpm/php-fpm.conf && \
+    sed -i -e 's/error_log = \/var\/log\/php7.3-fpm.log/error_log = \/home\/worker\/volume\/logs\/php\/fpm-error-stdout-stderr.log/g' /etc/php/7.3/fpm/php-fpm.conf && \
     sed -i -e 's/;log_level = notice/log_level = notice/g' /etc/php/7.3/fpm/php-fpm.conf && \
     echo 'catch_workers_output = yes' >> /etc/php/7.3/fpm/php-fpm.conf
 
@@ -94,7 +103,7 @@ RUN sed -i -e 's/user = www-data/user = worker/g' /etc/php/7.3/fpm/pool.d/www.co
     sed -i -e 's/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/;pm.max_requests = 500/pm.max_requests = 1000/g' /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i -e 's/;slowlog = log\/\$pool.log.slow/slowlog = \/home\/worker\/volume\/logs\/php-fpm\/slow.log/g' /etc/php/7.3/fpm/pool.d/www.conf && \
+    sed -i -e 's/;slowlog = log\/\$pool.log.slow/slowlog = \/home\/worker\/volume\/logs\/php\/slow.log/g' /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i -e 's/;request_slowlog_timeout = 0/request_slowlog_timeout = 5s/g' /etc/php/7.3/fpm/pool.d/www.conf
 
 #NGINX virtual host configuration
