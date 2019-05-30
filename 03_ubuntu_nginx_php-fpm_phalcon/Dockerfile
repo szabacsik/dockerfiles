@@ -43,7 +43,8 @@ RUN apt install -y \
 RUN apt install -y \
     php-curl \
     php-gd \
-    php-json
+    php-json \
+    php-mbstring
 
 #Add NGINX repository
 RUN add-apt-repository ppa:nginx/stable && \
