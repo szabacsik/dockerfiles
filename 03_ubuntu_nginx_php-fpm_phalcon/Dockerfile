@@ -16,7 +16,8 @@ RUN apt install -y \
 	sudo \
 	git \
 	libpcre3-dev \
-	apt-transport-https
+	apt-transport-https \
+	wget
 
 #Add worker user
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
@@ -120,8 +121,22 @@ RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.c
 RUN mkdir /home/worker/volume/logs/supervisord/child -p
 COPY supervisord.conf /etc/supervisor/conf.d/
 
+#Install Codeception
+RUN curl -LsS https://codeception.com/codecept.phar -o /usr/local/bin/codecept && \
+	chmod ugo+x /usr/local/bin/codecept
+
+#Install PHPUnit
+RUN curl -LsS https://phar.phpunit.de/phpunit-8.phar -o /usr/local/bin/phpunit && \
+	chmod ugo+x /usr/local/bin/phpunit
+
 #Helper scripts
 COPY versions.sh /home/worker/
+COPY installComposer.sh /home/worker/
+
+#Install Composer
+RUN /bin/bash -c /home/worker/installComposer.sh
+RUN mv /composer.phar /usr/local/bin/composer && \
+    chmod ugo+x /usr/local/bin/composer
 
 #Finalize and start
 RUN chown worker:worker /home/worker -R && \

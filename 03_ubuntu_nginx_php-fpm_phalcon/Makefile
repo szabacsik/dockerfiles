@@ -23,7 +23,7 @@ stop:
 	docker stop $(CONTAINER)
 
 versions:
-	docker run --rm -it $(NAME) /home/worker/versions.sh
+	docker run --rm -it $(NAME) sudo -i -u worker /home/worker/versions.sh
 
 clean:
 	-docker kill $(shell docker ps -q)
