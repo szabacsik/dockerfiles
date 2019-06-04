@@ -77,7 +77,7 @@ RUN cd /tmp && \
 #	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
 #	curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.deb.sh | sudo bash && \
 #	apt install -y php7.3-phalcon
-RUN git clone --branch 3.4.x https://github.com/phalcon/cphalcon.git /tmp/cphalcon
+RUN git clone --single-branch --branch 3.4.x https://github.com/phalcon/cphalcon.git /tmp/cphalcon
 RUN cd /tmp/cphalcon/build && \
     sudo ./install
 RUN touch /etc/php/7.3/cli/conf.d/50-phalcon.ini && \
