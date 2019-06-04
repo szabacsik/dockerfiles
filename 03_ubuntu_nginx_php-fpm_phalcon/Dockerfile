@@ -70,10 +70,19 @@ RUN cd /tmp && \
 
 #Install Phalcon Web Framework
 #https://docs.phalconphp.com/4.0/en/installation.html
-RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash && \
-	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
-	curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.deb.sh | sudo bash && \
-	apt install -y php7.3-phalcon
+#https://blog.phalconphp.com/post/phalcon-3-4-3-released
+#https://github.com/phalcon/cphalcon/releases/tag/v3.4.3
+#https://stackoverflow.com/questions/55942310/install-phalcon-3-4-3-and-getting-4-0-alpha
+#RUN curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash && \
+#	curl -s https://packagecloud.io/install/repositories/phalcon/mainline/script.deb.sh | sudo bash && \
+#	curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.deb.sh | sudo bash && \
+#	apt install -y php7.3-phalcon
+RUN git clone --branch 3.4.x https://github.com/phalcon/cphalcon.git /tmp/cphalcon
+RUN cd /tmp/cphalcon/build && \
+    sudo ./install
+RUN touch /etc/php/7.3/cli/conf.d/50-phalcon.ini && \
+    echo 'extension=phalcon.so' >> /etc/php/7.3/cli/conf.d/50-phalcon.ini && \
+    ln -sf /etc/php/7.3/cli/conf.d/50-phalcon.ini /etc/php/7.3/fpm/conf.d/50-phalcon.ini
 
 #PHP error reporting configuration
 RUN echo 'display_startup_errors=On' >> /etc/php/7.3/fpm/php.ini && \
