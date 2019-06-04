@@ -135,7 +135,8 @@ COPY versions.sh /home/worker/
 COPY installComposer.sh /home/worker/
 
 #Install Composer
-RUN /bin/bash -c /home/worker/installComposer.sh
+RUN chmod +x /home/worker/installComposer.sh && \
+    /bin/bash -c /home/worker/installComposer.sh
 RUN mv /composer.phar /usr/local/bin/composer && \
     chmod ugo+x /usr/local/bin/composer
 
