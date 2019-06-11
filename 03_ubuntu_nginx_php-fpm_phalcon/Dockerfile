@@ -20,7 +20,8 @@ RUN apt install -y \
 	wget \
 	zip \
 	unzip \
-	php-zip
+	php-zip \
+	mysql-client
 
 #Add worker user
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
@@ -47,7 +48,8 @@ RUN apt install -y \
     php-curl \
     php-gd \
     php-json \
-    php-mbstring
+    php-mbstring \
+    php7.3-mysql
 
 #Add NGINX repository
 RUN add-apt-repository ppa:nginx/stable && \
