@@ -17,7 +17,10 @@ RUN apt install -y \
 	git \
 	libpcre3-dev \
 	apt-transport-https \
-	wget
+	wget \
+	zip \
+	unzip \
+	php-zip
 
 #Add worker user
 RUN useradd -m -s /bin/bash -U worker -u 1000 && \
