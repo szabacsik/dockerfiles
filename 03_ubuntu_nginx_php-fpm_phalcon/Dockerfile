@@ -49,7 +49,7 @@ RUN apt install -y \
     php-json \
     php-mbstring \
     php-zip \
-    php7.4-mysql
+    php-mysql
 
 #Add NGINX repository
 RUN add-apt-repository ppa:nginx/stable && \
