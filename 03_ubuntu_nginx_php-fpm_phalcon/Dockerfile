@@ -154,6 +154,11 @@ RUN chmod +x /home/worker/installComposer.sh && \
 RUN mv /composer.phar /usr/local/bin/composer && \
     chmod ugo+x /usr/local/bin/composer
 
+#Install Phalcon Developer Tools
+RUN sudo su -s /bin/bash -c "composer global require phalcon/devtools" - worker && \
+    ln -s /home/worker/.composer/vendor/bin/phalcon /usr/local/bin/phalcon
+#docker exec -it -u1000 szabacsik-ubuntu_nginx_php-fpm_phalcon /bin/bash -c "cd ~/volume/artifact && rm -rf current && phalcon project current simple"
+
 #Finalize and start
 RUN chown worker:worker /home/worker -R && \
     chmod -R +rx /home/worker
