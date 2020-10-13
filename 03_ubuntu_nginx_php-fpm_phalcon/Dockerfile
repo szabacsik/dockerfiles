@@ -52,8 +52,8 @@ RUN apt install -y \
     php-mysql
 
 #Add NGINX repository
-RUN add-apt-repository ppa:nginx/stable && \
-    apt-get update
+#RUN add-apt-repository ppa:nginx/stable && \
+#    apt-get update
 
 #Install NGINX
 RUN apt install -y nginx
