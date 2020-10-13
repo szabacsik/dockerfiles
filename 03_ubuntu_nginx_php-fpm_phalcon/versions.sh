@@ -1,10 +1,7 @@
 #!/bin/bash
 printf "Operating System: `lsb_release -d -s`\n"
 printf "Kernel: `uname -r`\n"
-command="nginx -v"
-commandResult=$( ${command} 2>&1 )
-nginxVersionNumber=$(echo $commandResult | grep -o '[0-9.]*$')
-printf "Nginx: %s\n" $nginxVersionNumber
+printf "Nginx: `nginx -V 2>&1 | head -n 1`\n"
 printf "PHP: `php -r "echo phpversion();"`\n"
 printf "Phalcon: `php -r 'echo Phalcon\Version::get();'`\n"
 printf "PHPUnit: `phpunit --version`\n"
