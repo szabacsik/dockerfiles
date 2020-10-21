@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    hostname: php
+    ports:
+      - 80:80
+      - 9000:9000
+    volumes:
+      - ../app:/var/www/html
+#    networks:
+#      - backendNetwork
+#networks:
+#  backendNetwork:
+#    name: backend_network
